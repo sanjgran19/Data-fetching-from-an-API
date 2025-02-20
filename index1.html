@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Users List</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,37 +36,38 @@
     
     <table id="userTable">
         <thead>
-            <tr></tr> <!-- Table headers will be inserted here -->
+            <tr></tr> 
         </thead>
-        <tbody>
-            <!-- Table rows will be inserted here -->
-        </tbody>
+        <tbody></tbody>
     </table>
 
     <script>
-        // Fetch data from the JSONPlaceholder API
         fetch('https://jsonplaceholder.typicode.com/users')
             .then(response => response.json())
             .then(data => {
                 var table = document.getElementById("userTable");
                 var thead = table.getElementsByTagName("thead")[0];
                 var tbody = table.getElementsByTagName("tbody")[0];
-
-                // Insert the headers (just use the first object keys)
-                var headers = Object.keys(data[0]);
+                var headers = ["id", "name", "username", "email", "phone", "website", "street", "city", "companyName"];
                 var headerRow = "<tr>";
                 for (var i = 0; i < headers.length; i++) {
                     headerRow += "<th>" + headers[i].charAt(0).toUpperCase() + headers[i].slice(1) + "</th>";
                 }
                 headerRow += "</tr>";
                 thead.innerHTML = headerRow;
-
-                // Insert the rows (loop through the data)
                 var rows = "";
                 for (var i = 0; i < data.length; i++) {
                     var row = "<tr>";
                     for (var j = 0; j < headers.length; j++) {
-                        row += "<td>" + data[i][headers[j]] + "</td>";
+                        if (headers[j] === "street") {
+                            row += "<td>" + data[i].address.street + "</td>";
+                        } else if (headers[j] === "city") {
+                            row += "<td>" + data[i].address.city + "</td>";
+                        } else if (headers[j] === "companyName") {
+                            row += "<td>" + data[i].company.name + "</td>";
+                        } else {
+                            row += "<td>" + data[i][headers[j]] + "</td>";
+                        }
                     }
                     row += "</tr>";
                     rows += row;
